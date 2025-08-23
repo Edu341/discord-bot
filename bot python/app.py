@@ -1,3 +1,9 @@
+import os
+print("=== DEBUG ===")
+print("Current directory:", os.getcwd())
+print("Files here:", os.listdir())
+print("=== END DEBUG ===")
+
 # ID dei ruoli da assegnare in base al numero di warn
 WARN_ROLE_IDS = {
     1: 1403679881333706823,  # 1 warn
@@ -1395,3 +1401,4 @@ async def on_message(message):
 
 # Avvia il bot solo alla fine
 bot.run(TOKEN)
+
