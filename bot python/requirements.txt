@@ -4,3 +4,4 @@ flask
 requests
 gtts
 yt-dlp
+Fix requirements.txt
