@@ -1,4 +1,21 @@
+import asyncio
+import threading
+import requests
+import time
 
+# Funzione keep-alive per Render
+def run_keep_alive():
+    while True:
+        try:
+            requests.get("https://ecbot-i4ny.onrender.com")
+            time.sleep(240)  # 4 minuti (meno di 5)
+        except Exception as e:
+            print(f"Keep-alive error: {e}")
+            time.sleep(240)
+
+# Avvia keep-alive in thread separato
+keep_alive_thread = threading.Thread(target=run_keep_alive, daemon=True)
+keep_alive_thread.start()
 
 # ID dei ruoli da assegnare in base al numero di warn
 WARN_ROLE_IDS = {
@@ -28,38 +45,13 @@ import time
 import requests
 import os
 
-app = Flask(__name__)
-
-# Funzione per mantenere attivo il worker
-def keep_alive():
-    while True:
-        try:
-            requests.get("https://ecbot-i4ny.onrender.com")
-            time.sleep(300)  # 5 minuti
-        except:
-            time.sleep(300)
-
-@app.route('/')
-def home():
-    return "✅ Bot Online e Funzionante!"
-
-@app.route('/health')
-def health_check():
-    return {"status": "healthy", "message": "Tutto ok!"}, 200
-
-# Avvia il thread keep-alive
-threading.Thread(target=keep_alive, daemon=True).start()
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 10000))
-    app.run(host='0.0.0.0', port=port)
-
 # --- FUN & SOCIAL COMMANDS ---
 @app_commands.command(name="meme", description="Send a random meme from Reddit")
 async def meme(interaction: discord.Interaction):
     r = requests.get("https://meme-api.com/gimme")
     data = r.json()
-    embed = discord.Embed(title=data['title'], url=data['postLink'], color=discord.Color.blurple())
+    embed = discord.Embed(title=data['title'], url=data['postLink'], color=discord.Color
+						  ))
     embed.set_image(url=data['url'])
     await interaction.response.send_message(embed=embed)
 
@@ -1426,7 +1418,9 @@ async def on_message(message):
 
     # ...existing code...
 
-# Avvia il bot solo alla fine
-bot.run(TOKEN)
+if __name__ == "__main__":
+    print("Starting Discord bot and keep-alive...")
+    bot.run(TOKEN)
+
 
 
