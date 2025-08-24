@@ -50,7 +50,7 @@ import os
 async def meme(interaction: discord.Interaction):
     r = requests.get("https://meme-api.com/gimme")
     data = r.json()
-    embed = discord.Embed(title=data['title'], url=data['postLink'], color=discord.Color))
+    embed = discord.Embed(title=data['title'], url=data['postLink'], color=discord.Color)
     embed.set_image(url=data['url'])
     await interaction.response.send_message(embed=embed)
 
@@ -1420,6 +1420,7 @@ async def on_message(message):
 if __name__ == "__main__":
     print("Starting Discord bot and keep-alive...")
     bot.run(TOKEN)
+
 
 
 
