@@ -1,3 +1,27 @@
+
+
+# ID dei ruoli da assegnare in base al numero di warn
+WARN_ROLE_IDS = {
+    1: 1403679881333706823,  # 1 warn
+    2: 1403679930885345310, # 2 warn
+    3: 1403679970886291497  # 3 warn
+}
+import discord
+from discord.ext import commands
+from discord import app_commands, ui
+import os
+import asyncio
+from gtts import gTTS
+import yt_dlp
+from collections import defaultdict
+import random
+import time
+import sqlite3
+import platform
+from datetime import datetime, timedelta
+from dotenv import load_dotenv
+import hashlib
+import requests
 from flask import Flask
 import threading
 import time
@@ -29,29 +53,6 @@ threading.Thread(target=keep_alive, daemon=True).start()
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port)
-
-# ID dei ruoli da assegnare in base al numero di warn
-WARN_ROLE_IDS = {
-    1: 1403679881333706823,  # 1 warn
-    2: 1403679930885345310, # 2 warn
-    3: 1403679970886291497  # 3 warn
-}
-import discord
-from discord.ext import commands
-from discord import app_commands, ui
-import os
-import asyncio
-from gtts import gTTS
-import yt_dlp
-from collections import defaultdict
-import random
-import time
-import sqlite3
-import platform
-from datetime import datetime, timedelta
-from dotenv import load_dotenv
-import hashlib
-import requests
 
 # --- FUN & SOCIAL COMMANDS ---
 @app_commands.command(name="meme", description="Send a random meme from Reddit")
@@ -1427,4 +1428,5 @@ async def on_message(message):
 
 # Avvia il bot solo alla fine
 bot.run(TOKEN)
+
 
