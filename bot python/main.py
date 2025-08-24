@@ -279,9 +279,8 @@ async def userinfo(interaction: discord.Interaction, user: discord.Member):
 async def poll(interaction: discord.Interaction, question: str):
     embed = discord.Embed(title="Poll", description=question, color=discord.Color.purple())
     msg = await interaction.channel.send(embed=embed)
-    await msg.add_reaction("✔️")
-    await msg.add_reaction("⭕️")
-await msg.add_reaction("❌️")
+    await msg.add_reaction("✅")  # Usa invece queste
+	await msg.add_reaction("❌️") 
     await interaction.response.send_message("Poll created!", ephemeral=True)
 
 @app_commands.command(name="translate", description="Translate text to a language")
@@ -2324,6 +2323,7 @@ keep_alive_thread.start()
 if __name__ == "__main__":
     print("Starting Discord bot and keep-alive...")
     bot.run(TOKEN)
+
 
 
 
