@@ -1,3 +1,27 @@
+from flask import Flask
+from threading import Thread
+import time
+
+# Flask server per Render
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "✅ Bot Online e Funzionante!"
+
+@app.route('/health')
+def health_check():
+    return {"status": "healthy"}, 200
+
+def run_flask():
+    app.run(host='0.0.0.0', port=10000)
+
+# Avvia Flask in thread separato
+flask_thread = Thread(target=run_flask)
+flask_thread.daemon = True
+flask_thread.start()
+
+print("✅ Flask server avviato sulla porta 10000")
 import asyncio
 import threading
 import requests
@@ -1415,11 +1439,24 @@ async def on_message(message):
         if auto_channel and not message.author.bot:
             await auto_channel.send(f"Automatic message: {message.content}")
 
-    # ...existing code...
+# Keep-alive per Render
+def run_keep_alive():
+    import requests
+    while True:
+        try:
+            requests.get("https://ecbot-i4ny.onrender.com/health", timeout=10)
+            time.sleep(240)
+        except:
+            time.sleep(240)
 
+keep_alive_thread = Thread(target=run_keep_alive)
+keep_alive_thread.daemon = True
+keep_alive_thread.start()
+# ...existing code...
 if __name__ == "__main__":
     print("Starting Discord bot and keep-alive...")
     bot.run(TOKEN)
+
 
 
 
