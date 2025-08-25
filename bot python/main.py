@@ -954,6 +954,46 @@ WARN_ROLE_IDS = {
         auto_channel = message.guild.get_channel(AUTO_MESSAGE_CHANNEL_ID)
         if auto_channel and not message.author.bot:
             await auto_channel.send(f"Automatic message: {message.content}")
+# ID del canale dove il bot manda messaggi automatici
+AUTO_MESSAGE_CHANNEL_ID = 1392062910259531797  # Canale auto messages
+
+# Klub management in on_message
+async def on_message(message):
+    # ...existing code...
+    # Klub commands
+    if message.content.startswith('>modify '):
+        name = message.content[len('>modify '):].strip()
+        # Modifica il canale klub (esempio: cambia topic)
+        channel = discord.utils.get(message.guild.channels, name=name)
+        if channel:
+            await channel.edit(topic=f"Modified by {message.author.display_name}")
+            await message.channel.send(f"Klub '{name}' modified!", delete_after=5)
+        else:
+            await message.channel.send(f"Klub '{name}' not found.", delete_after=5)
+
+    elif message.content.startswith('>unlock'):
+        # Rende il canale accessibile a tutti
+        channel = message.channel
+        await channel.set_permissions(message.guild.default_role, view_channel=True, send_messages=True)
+        await channel.send("Klub unlocked for everyone!", delete_after=5)
+
+    elif message.content.startswith('>trust '):
+        user_mention = message.content[len('>trust '):].strip()
+        user = None
+        if user_mention.startswith('<@') and user_mention.endswith('>'):
+            user_id = int(user_mention[2:-1])
+            user = message.guild.get_member(user_id)
+        if user:
+            await message.channel.set_permissions(user, view_channel=True, send_messages=True)
+            await message.channel.send(f"{user.mention} can now access this klub!", delete_after=5)
+        else:
+            await message.channel.send("User not found.", delete_after=5)
+
+    elif message.content.startswith('>delete'):
+        channel = message.channel
+        await channel.send("Klub will be deleted in 5 seconds.", delete_after=5)
+        await asyncio.sleep(5)
+        await channel.delete()
 
 # Keep-alive per Render
 def run_keep_alive():
@@ -972,3 +1012,4 @@ keep_alive_thread.start()
 if __name__ == "__main__":
     print("Starting Discord bot and keep-alive...")
     bot.run(TOKEN)
+
