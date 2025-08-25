@@ -1,6 +1,20 @@
 from flask import Flask
 from threading import Thread
+import discord
+from discord.ext import commands
+from discord import app_commands, ui
+import os
+import asyncio
 import time
+import requests
+import random
+from collections import defaultdict
+from datetime import datetime, timedelta
+from dotenv import load_dotenv
+import sqlite3
+import yt_dlp
+from gtts import gTTS
+import hashlib
 
 # Flask server per Render
 app = Flask(__name__)
@@ -22,10 +36,6 @@ flask_thread.daemon = True
 flask_thread.start()
 
 print("✅ Flask server avviato sulla porta 10000")
-import asyncio
-import threading
-import requests
-import time
 
 # Funzione keep-alive per Render
 def run_keep_alive():
@@ -38,36 +48,29 @@ def run_keep_alive():
             time.sleep(240)
 
 # Avvia keep-alive in thread separato
-keep_alive_thread = threading.Thread(target=run_keep_alive, daemon=True)
+keep_alive_thread = Thread(target=run_keep_alive, daemon=True)
 keep_alive_thread.start()
 
 # ID dei ruoli da assegnare in base al numero di warn
 WARN_ROLE_IDS = {
     1: 1403679881333706823,  # 1 warn
-    2: 1403679930885345310, # 2 warn
-    3: 1403679970886291497  # 3 warn
+    2: 1403679930885345310,  # 2 warn
+    3: 1403679970886291497   # 3 warn
 }
-import discord
-from discord.ext import commands
-from discord import app_commands, ui
-import os
-import asyncio
-from gtts import gTTS
-import yt_dlp
-from collections import defaultdict
-import random
-import time
-import sqlite3
-import platform
-from datetime import datetime, timedelta
-from dotenv import load_dotenv
-import hashlib
-import requests
-from flask import Flask
-import threading
-import time
-import requests
-import os
+
+# Carica variabili d'ambiente
+load_dotenv()
+TOKEN = os.getenv('DISCORD_TOKEN')
+
+if not TOKEN or TOKEN.strip() == '' or TOKEN == 'None':
+    print('[ERRORE] Il token Discord non è stato trovato. Controlla il file .env e la variabile DISCORD_TOKEN.')
+    exit(1)
+
+# Configurazione bot
+intents = discord.Intents.default()
+intents.message_content = True
+intents.voice_states = True
+bot = commands.Bot(command_prefix='!', intents=intents)
 
 # --- FUN & SOCIAL COMMANDS ---
 @app_commands.command(name="meme", description="Send a random meme from Reddit")
@@ -2323,6 +2326,7 @@ keep_alive_thread.start()
 if __name__ == "__main__":
     print("Starting Discord bot and keep-alive...")
     bot.run(TOKEN)
+
 
 
 
