@@ -16,6 +16,36 @@ import sqlite3
 import yt_dlp
 from gtts import gTTS
 import hashlib
+import os
+import subprocess
+import sys
+
+# Installa FFmpeg se non è presente
+def install_ffmpeg():
+    try:
+        # Controlla se ffmpeg è già installato
+        result = subprocess.run(['ffmpeg', '-version'], capture_output=True, text=True)
+        if result.returncode == 0:
+            print("✅ FFmpeg è già installato")
+            return True
+    except FileNotFoundError:
+        print("⚠️  FFmpeg non trovato, procedo con l'installazione...")
+    
+    try:
+        # Installa FFmpeg su sistemi Debian/Ubuntu (Render usa Ubuntu)
+        subprocess.run(['apt-get', 'update'], check=True)
+        subprocess.run(['apt-get', 'install', '-y', 'ffmpeg'], check=True)
+        print("✅ FFmpeg installato con successo")
+        return True
+    except Exception as e:
+        print(f"❌ Errore installazione FFmpeg: {e}")
+        return False
+
+# Installa FFmpeg all'avvio
+if install_ffmpeg():
+    print("FFmpeg pronto per l'uso")
+else:
+    print("Avviso: FFmpeg non disponibile, alcune funzionalità audio non funzioneranno")
 
 # Flask server per Render
 app = Flask(__name__)
@@ -120,7 +150,8 @@ async def quiz(interaction: discord.Interaction):
         ("What is the capital of Italy?", "Rome"),
         ("2+2?", "4"),
         ("Color of the sky?", "blue")
-    ]
+		("What server is the best?", "Edu's Community")
+  ]
     q, a = random.choice(questions)
     await interaction.response.send_message(f"Question: {q}")
     def check(m):
@@ -2327,6 +2358,7 @@ keep_alive_thread.start()
 if __name__ == "__main__":
     print("Starting Discord bot and keep-alive...")
     bot.run(TOKEN)
+
 
 
 
