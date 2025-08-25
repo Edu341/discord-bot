@@ -1,5 +1,6 @@
 from flask import Flask
 from threading import Thread
+import threading
 import discord
 from discord.ext import commands
 from discord import app_commands, ui
@@ -2326,6 +2327,7 @@ keep_alive_thread.start()
 if __name__ == "__main__":
     print("Starting Discord bot and keep-alive...")
     bot.run(TOKEN)
+
 
 
 
