@@ -1259,7 +1259,7 @@ nuke_actions = {}
 raid_links = {}
 spam_tracker = {}
 BLACKLISTED_WORDS = [
-    'diocane', 'dio cane', 'porco dio', 'discord.gg/', 'troia', 'negra'  # aggiungi qui le parole da bloccare
+        'diocane', 'dio cane', 'porco dio', 'discord.gg/', 'troia', 'negra' , 'D1o Cane' , 'PORC0 D|O' , 'negro' , 'Negrodio' , 'Porcodio' , 'Dioporco' , 'Rettiledio' , 'Porco Gesù' , 'Your mother', 'discordapp.com/' # aggiungi qui le parole da bloccare
 ]
 BLACKLIST_MUTE_DURATION = 60  # secondi (1min), puoi mettere 300 per 5min
 IGNORED_CATEGORY_ID = 1234567890123456998  # Sostituisci con l'ID della categoria da ignorare
