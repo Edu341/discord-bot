@@ -950,10 +950,29 @@ WARN_ROLE_IDS = {
     3: 1403679970886291497  # 3 warn
 }
     # Messaggi automatici del bot
+   @bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
+    
+    # Ignora utenti/bot whitelistati
+    if message.author.id in WHITELISTED_USER_IDS:
+        await bot.process_commands(message)
+        return
+    
+    # Automod: ignora la categoria
+    if hasattr(message.channel, 'category') and message.channel.category and message.channel.category.id == IGNORED_CATEGORY_ID:
+        await bot.process_commands(message)
+        return
+    
+    # Auto message feature - QUESTA PARTE DEVE STARE QUI DENTRO
     if AUTO_MESSAGE_CHANNEL_ID:
         auto_channel = message.guild.get_channel(AUTO_MESSAGE_CHANNEL_ID)
         if auto_channel and not message.author.bot:
             await auto_channel.send(f"Automatic message: {message.content}")
+    
+    # Processa i comandi normalmente
+    await bot.process_commands(message)
 # ID del canale dove il bot manda messaggi automatici
 AUTO_MESSAGE_CHANNEL_ID = 1392062910259531797  # Canale auto messages
 
@@ -1012,4 +1031,5 @@ keep_alive_thread.start()
 if __name__ == "__main__":
     print("Starting Discord bot and keep-alive...")
     bot.run(TOKEN)
+
 
