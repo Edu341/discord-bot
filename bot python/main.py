@@ -571,8 +571,8 @@ async def on_ready():
             except Exception as e:
                 print(f"Error deleting ticket messages: {e}")
             embed = discord.Embed(
-                title="🎫 Open a Ticket",
-                description="Need help or want a partnership? Click a button below to open a ticket or request a partnership with our staff.",
+                title="🎫 Apri ticket",
+                description="Apri il ticket per parlare con lo staff superiore",
                 color=discord.Color.blue()
             )
             await channel.send(embed=embed, view=OpenTicketView())
@@ -1088,6 +1088,7 @@ keep_alive_thread.start()
 if __name__ == "__main__":
     print("Starting Discord bot and keep-alive...")
     bot.run(TOKEN)
+
 
 
 
