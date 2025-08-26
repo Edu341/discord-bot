@@ -149,7 +149,7 @@ async def quiz(interaction: discord.Interaction):
     questions = [
         ("What is the capital of Italy?", "Rome"),
         ("2+2?", "4"),
-        ("Color of the sky?", "blue")
+        ("Color of the sky?", "blue"),
 		("What server is the best?", "Edu's Community")
   ]
     q, a = random.choice(questions)
@@ -1063,7 +1063,3 @@ keep_alive_thread.start()
 if __name__ == "__main__":
     print("Starting Discord bot and keep-alive...")
     bot.run(TOKEN)
-
-
-
-
