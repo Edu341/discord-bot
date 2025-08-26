@@ -950,7 +950,7 @@ WARN_ROLE_IDS = {
     3: 1403679970886291497  # 3 warn
 }
     # Messaggi automatici del bot
-   @bot.event
+@bot.event
 async def on_message(message):
     if message.author == bot.user:
         return
@@ -1031,5 +1031,6 @@ keep_alive_thread.start()
 if __name__ == "__main__":
     print("Starting Discord bot and keep-alive...")
     bot.run(TOKEN)
+
 
 
