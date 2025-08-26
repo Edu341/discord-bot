@@ -965,11 +965,43 @@ async def on_message(message):
         await bot.process_commands(message)
         return
     
-    # Auto message feature - QUESTA PARTE DEVE STARE QUI DENTRO
-    if AUTO_MESSAGE_CHANNEL_ID:
+    # Auto message feature - MESSAGGI CASUALI invece di ripetere
+    if AUTO_MESSAGE_CHANNEL_ID and random.random() < 0.1:  # 10% di probabilità
         auto_channel = message.guild.get_channel(AUTO_MESSAGE_CHANNEL_ID)
-        if auto_channel and not message.author.bot:
-            await auto_channel.send(f"Automatic message: {message.content}")
+        if auto_channel:
+            # Lista di messaggi casuali
+            random_messages = [
+                "🎉 Benvenuti nel server! Non dimenticate di leggere le regole!",
+                "💬 Qualcuno ha bisogno di aiuto? Aprite un ticket!",
+                "🎵 Qual è la vostra canzone preferita in questo momento?",
+                "🚀 Il server sta crescendo! Invitate i vostri amici!",
+                "📢 Ricordate di verificarsi per accedere a tutti i canali!",
+                "🎮 Qualcuno vuole giocare insieme?",
+                "🤖 Sono qui per aiutare! Usate /help per vedere i comandi",
+                "⭐ Non dimenticate di lasciare una recensione sul server!",
+                "💡 Avete idee per migliorare il server? Ditelo allo staff!",
+                "🎊 Festeggiamo insieme! Il server è fantastico!",
+                "📸 Condividete le vostre foto nel canale gallery!",
+                "❓ Domande? Lo staff è sempre disponibile ad aiutare!",
+				"🎉 Welcome to the server! Don't forget to read the rules!",
+				"💬 Anyone need help? Open a ticket!",
+				"🎵 What's your favorite song right now?",
+				"🚀 The server is growing! Invite your friends!",
+				"📢 Remember to verify yourself to access all channels!",
+				"🎮 Anyone want to play together?",
+				"🤖 I'm here to help! Use /help to see the commands!",
+				"⭐ Don't forget to leave a review about the server!"
+				"💡 Do you have ideas for improving the server? Tell the staff!",
+				"🎊 Let's celebrate together! The server is amazing!",
+				"📸 Share your photos in the gallery channel!",
+				"❓ Questions? The staff is always available to help!",
+            ]
+            
+            message_to_send = random.choice(random_messages)
+            await auto_channel.send(message_to_send)
+    
+    # Processa i comandi normalmente
+    await bot.process_commands(message)
     
     # Processa i comandi normalmente
     await bot.process_commands(message)
@@ -1031,6 +1063,7 @@ keep_alive_thread.start()
 if __name__ == "__main__":
     print("Starting Discord bot and keep-alive...")
     bot.run(TOKEN)
+
 
 
 
