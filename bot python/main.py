@@ -560,6 +560,22 @@ async def on_ready():
                 color=discord.Color.blue()
             )
             await channel.send(embed=embed, view=OpenTicketView())
+			    
+	# Ticket: elimina i messaggi precedenti e invia nuovo messaggio ticket
+    for guild in bot.guilds:
+        channel = guild.get_channel(1409889529879330907)
+        if channel:
+            try:
+                async for msg in channel.history(limit=20):
+                    await msg.delete()
+            except Exception as e:
+                print(f"Error deleting ticket messages: {e}")
+            embed = discord.Embed(
+                title="🎫 Open a Ticket",
+                description="Need help or want a partnership? Click a button below to open a ticket or request a partnership with our staff.",
+                color=discord.Color.blue()
+            )
+            await channel.send(embed=embed, view=OpenTicketView())
 
     # Sincronizza i comandi slash
     try:
@@ -719,8 +735,8 @@ async def role(ctx, member: discord.Member, *, role_name: str):
 async def eklubs(interaction: discord.Interaction):
     # Ottieni i ruoli che possono creare un klub
     allowed_roles = []
-    for count, role_name in INVITE_ROLES.items():
-        role = discord.utils.get(interaction.guild.roles, name=role_name)
+    for count, role_id in INVITE_ROLES.items():
+        role = discord.utils.get(interaction.guild.roles, name=role_id)
         if role:
             allowed_roles.append(role.mention)
     allowed_roles_str = '\n'.join(allowed_roles) if allowed_roles else 'Nessun ruolo trovato.'
@@ -1062,4 +1078,5 @@ keep_alive_thread.start()
 if __name__ == "__main__":
     print("Starting Discord bot and keep-alive...")
     bot.run(TOKEN)
+
 
