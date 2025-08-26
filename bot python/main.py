@@ -736,27 +736,26 @@ async def eklubs(interaction: discord.Interaction):
     # Ottieni i ruoli che possono creare un klub
     allowed_roles = []
     for count, role_id in INVITE_ROLES.items():
-        role = discord.utils.get(interaction.guild.roles, name=role_id)
+        role = interaction.guild.get_role(role_id)
         if role:
             allowed_roles.append(role.mention)
+    
     allowed_roles_str = '\n'.join(allowed_roles) if allowed_roles else 'Nessun ruolo trovato.'
+
     class AuthorizedRolesView(ui.View):
+        def __init__(self):
+            super().__init__(timeout=120)
+            
         @ui.button(label="Authorized roles", style=discord.ButtonStyle.primary)
         async def show_roles(self, interaction2: discord.Interaction, button: ui.Button):
             role_ids = list(INVITE_ROLES.values())
-            await interaction2.response.send_message(f"Authorized role IDs: {', '.join(str(rid) for rid in role_ids)}", ephemeral=True)
+            await interaction2.response.send_message(
+                f"Authorized role IDs: {', '.join(str(rid) for rid in role_ids)}", 
+                ephemeral=True
+            )
 
-        channel_id = 1402978154284453908  # Sostituisci con l'ID del canale desiderato
-    for guild in bot.guilds:
-        channel = guild.get_channel(channel_id)
-        if channel:
-            # Elimina ultimi 20 messaggi
-            try:
-                async for msg in channel.history(limit=20):
-                    await msg.delete()
-            except Exception as e:
-                print(f"Errore cancellando messaggi: {e}")
-	embed = discord.Embed(
+    # Crea l'embed
+    embed = discord.Embed(
         title="What are Eklubs?",
         description=(
             "Eklubs are private rooms in Edu's Community where you decide who can enter!\n\n"
@@ -772,9 +771,20 @@ async def eklubs(interaction: discord.Interaction):
         color=discord.Color.purple()
     )
     embed.set_footer(text="Authorized Roles")
+
+    # Pulisci il canale e invia il nuovo embed
     channel_id = 1402978154284453908
     channel = interaction.guild.get_channel(channel_id)
+    
     if channel:
+        try:
+            # Pulisci il canale (elimina ultimi 20 messaggi)
+            async for msg in channel.history(limit=20):
+                await msg.delete()
+        except Exception as e:
+            print(f"Errore cancellando messaggi: {e}")
+        
+        # Invia il nuovo embed
         await channel.send(embed=embed, view=AuthorizedRolesView())
         await interaction.response.send_message(f"Embed sent to {channel.mention}", ephemeral=True)
     else:
@@ -1078,5 +1088,6 @@ keep_alive_thread.start()
 if __name__ == "__main__":
     print("Starting Discord bot and keep-alive...")
     bot.run(TOKEN)
+
 
 
