@@ -692,17 +692,6 @@ async def jointts(ctx):
             reading = False
             break
 
-# !leaderboard (placeholder)
-@bot.command()
-async def leaderboard(ctx):
-	await ctx.send('Leaderboard non ancora implementata.')
-
-# !partner (placeholder)
-@bot.command()
-async def partner(ctx):
-	await ctx.send('Partner non ancora implementato.')
-
-
 # !giveaway (placeholder)
 @bot.command()
 async def giveaway(ctx):
@@ -741,7 +730,17 @@ async def eklubs(interaction: discord.Interaction):
             role_ids = list(INVITE_ROLES.values())
             await interaction2.response.send_message(f"Authorized role IDs: {', '.join(str(rid) for rid in role_ids)}", ephemeral=True)
 
-    embed = discord.Embed(
+        channel_id = 1402978154284453908  # Sostituisci con l'ID del canale desiderato
+    for guild in bot.guilds:
+        channel = guild.get_channel(channel_id)
+        if channel:
+            # Elimina ultimi 20 messaggi
+            try:
+                async for msg in channel.history(limit=20):
+                    await msg.delete()
+            except Exception as e:
+                print(f"Errore cancellando messaggi: {e}")
+	embed = discord.Embed(
         title="What are Eklubs?",
         description=(
             "Eklubs are private rooms in Edu's Community where you decide who can enter!\n\n"
@@ -1063,3 +1062,4 @@ keep_alive_thread.start()
 if __name__ == "__main__":
     print("Starting Discord bot and keep-alive...")
     bot.run(TOKEN)
+
